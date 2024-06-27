@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.chainsys.springdemo.dao.UserDAO;
 import com.chainsys.springdemo.dao.UserDaoImpl;
 import com.chainsys.springdemo.model.User;
 
@@ -17,31 +18,28 @@ public class SampleController {
 	User user=new User();
 	
 	@Autowired
-	private UserDaoImpl userDaoImpl;
+	private UserDAO userDao;
 	
 	@RequestMapping("/")
 	public String save() {		
-		System.out.println("landing page");
 		return "index.jsp";
 	}
 	
 	@RequestMapping("/register")
 	public String toLogin(@RequestParam("username") String name,@RequestParam("password") String password,@RequestParam("email") String email,Model model) {
-		System.out.println("to register");
 		user.setUsername(name);
 		user.setPassword(password);
 		user.setEmail(email);
-		userDaoImpl.save(user);
-		List<User> users = userDaoImpl.getUsers();
+		userDao.save(user);
+		List<User> users = userDao.getUsers();
 		model.addAttribute("users",users);
 		return " crud.jsp";
 	}
 	
 	@RequestMapping("/delete")
 	public String toDelete(@RequestParam("id") int id,Model model) {
-		System.out.println("to delete");
-		userDaoImpl.deleteUser(id);
-		List<User> users = userDaoImpl.getUsers();
+		userDao.deleteUser(id);
+		List<User> users = userDao.getUsers();
 		model.addAttribute("users",users);
 		return " crud.jsp";		
 	}
@@ -52,11 +50,27 @@ public class SampleController {
 		user.setPassword(password);
 		user.setEmail(email);
 		user.setId(id);
-		userDaoImpl.updateuser(user);
-		List<User> users = userDaoImpl.getUsers();
+		userDao.updateuser(user);
+		List<User> users = userDao.getUsers();
+		model.addAttribute("users",users);
+		return " crud.jsp";		
+	}
+	
+	@RequestMapping("/search")
+	public String search(@RequestParam("name") String name,Model model) {
+		List<User>  users = userDao.searchUser(name);
 		model.addAttribute("users",users);
 		return " crud.jsp";	
-		
+	}
+	
+	@RequestMapping("/getupdate")
+	public String getUpdate(@RequestParam("id") int id,Model model) {
+		System.out.println("in get update");
+		System.out.println(id);
+		List<User>  users = userDao.getUser(id);
+		model.addAttribute("users",users);
+		System.out.println("after getting users"+users);
+		return "update.jsp";		
 	}
 
 }
