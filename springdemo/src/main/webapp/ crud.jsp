@@ -17,12 +17,6 @@
     margin: 20px;
 }
 
-h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
 .search-box {
     width: 400px;
     margin: 0 auto 20px;
@@ -155,7 +149,6 @@ a:focus {
     </style>
  </style>
 <body>
-<h2>Table</h2>
  <div class="search-box">
             <form action="/search" method="post">
                 <input type="text" name="name" placeholder="Search...">

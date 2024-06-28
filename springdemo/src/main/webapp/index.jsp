@@ -80,26 +80,74 @@ h2 {
 .btn:focus {
     outline: none;
 }
+.error {
+            color: red;
+        }
 </style>
 </head>
 <body>
 <div class="container">
         <h2>Registration Form</h2>
-        <form action="register" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <button type="submit" class="btn">Submit</button>
-        </form>
+       <form id="registrationForm" action="register" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <div id="usernameError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <div id="passwordError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div id="emailError" class="error"></div>
+        </div>
+        <button type="submit" class="btn">Submit</button>
+    </form>
     </div>
+ <script>
+ document.getElementById('registrationForm').addEventListener('submit', function(event) {
+     let valid = true;
+
+     // Username validation (at least 3 characters, only letters and numbers)
+     const usernamePattern = /^[a-zA-Z0-9]{3,}$/;
+     const username = document.getElementById('username').value;
+     const usernameError = document.getElementById('usernameError');
+     if (!usernamePattern.test(username)) {
+         usernameError.textContent = 'Username must be at least 3 characters long and contain only letters and numbers.';
+         valid = false;
+     } else {
+         usernameError.textContent = '';
+     }
+
+     // Password validation (at least 6 characters, at least one letter and one number)
+     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&+=])[A-Za-z\d@#$%^&+=]{6,}$/;
+     const password = document.getElementById('password').value;
+     const passwordError = document.getElementById('passwordError');
+     if (!passwordPattern.test(password)) {
+         passwordError.textContent = 'Password must be at least 6 characters long and contain (@#$%^&+=).';
+         valid = false;
+     } else {
+         passwordError.textContent = '';
+     }
+
+     // Email validation
+     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     const email = document.getElementById('email').value;
+     const emailError = document.getElementById('emailError');
+     if (!emailPattern.test(email)) {
+         emailError.textContent = 'Please enter a valid email address.';
+         valid = false;
+     } else {
+         emailError.textContent = '';
+     }
+
+     if (!valid) {
+         event.preventDefault();
+     }
+ });
+ </script>
 </body>
 </html>
